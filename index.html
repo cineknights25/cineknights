@@ -1,72 +1,47 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>My IMDb Watch Log</title>
   <style>
-    :root{font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;}
-    body{margin:0;padding:32px;background:#0f172a;color:#e6eef8}
-    h1{margin:0 0 16px;font-size:1.7rem}
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:20px;margin-top:20px}
-    .card{background:#1e293b;border-radius:14px;padding:16px;box-shadow:0 6px 18px rgba(0,0,0,0.55)}
-    .title{font-weight:600;margin:6px 0;font-size:1.1rem}
-    .meta{font-size:0.9rem;color:#b8c7da;margin-bottom:8px}
-    .frame-wrap{position:relative;height:200px;border-radius:10px;overflow:hidden;background:#071025}
-    iframe{width:100%;height:100%;border:0}
-    .fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:12px;text-align:center}
-    .btn{display:inline-block;margin-top:8px;padding:8px 12px;border-radius:8px;text-decoration:none;background:#334155;color:#fff;font-weight:600}
-    footer{margin-top:30px;color:#9fb0d0;font-size:0.85rem}
+    body { margin:0; padding:32px; background:#0f172a; color:#e6eef8; font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial; }
+    h1 { margin-bottom:20px; font-size:1.7rem; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:20px; }
+    .card { background:#1e293b; border-radius:14px; padding:12px; box-shadow:0 6px 18px rgba(0,0,0,0.55); display:flex; flex-direction:column; align-items:center; }
+    .card img { border-radius:10px; width:100%; height:auto; object-fit:cover; }
+    .title { font-weight:600; margin:8px 0 4px; font-size:1rem; text-align:center; }
+    .meta { font-size:0.85rem; color:#b8c7da; margin-bottom:8px; text-align:center; }
+    .btn { padding:6px 12px; border-radius:8px; text-decoration:none; background:#334155; color:#fff; font-weight:600; }
+    footer { margin-top:30px; color:#9fb0d0; font-size:0.85rem; text-align:center; }
   </style>
 </head>
 <body>
   <h1>My IMDb Movies — Watch Log</h1>
-  <p>This page shows IMDb movies I've watched, including the date I saw them.</p>
-
   <div class="grid" id="grid"></div>
-
-  <footer>
-    This site is generated automatically using a simple movie list in JavaScript. Edit <code>index.html</code> → the <code>movies</code> array to add more.
-  </footer>
+  <footer>This page shows movies I watched with posters and watched dates. Click the poster or button to open IMDb.</footer>
 
   <script>
-    // Add your movies here
     const movies = [
-      { title: 'The Shawshank Redemption (1994)', imdb: 'https://www.imdb.com/title/tt0111161/', date: '2023-12-20' },
-      { title: 'Inception (2010)', imdb: 'https://www.imdb.com/title/tt1375666/', date: '2024-02-01' },
-      { title: 'The Matrix (1999)', imdb: 'https://www.imdb.com/title/tt0133093/', date: '2022-11-10' }
+      { title: 'The Shawshank Redemption (1994)', imdb: 'https://www.imdb.com/title/tt0111161/', date: '2023-12-20', poster: 'https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYzRhYjU3XkEyXkFqcGdeQXVyNDYyMDk5MTU@._V1_UX182_CR0,0,182,268_AL_.jpg' },
+      { title: 'Inception (2010)', imdb: 'https://www.imdb.com/title/tt1375666/', date: '2024-02-01', poster: 'https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNV5BMl5BanBnXkFtZTcwODI5OTM0Mw@@._V1_UX182_CR0,0,182,268_AL_.jpg' },
+      { title: 'The Matrix (1999)', imdb: 'https://www.imdb.com/title/tt0133093/', date: '2022-11-10', poster: 'https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQzYS00ZTA4LThjMDQtZDMxOTU4ZWEwMzQ3XkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_UX182_CR0,0,182,268_AL_.jpg' }
     ];
 
     const grid = document.getElementById('grid');
 
     movies.forEach(m => {
       const card = document.createElement('div'); card.className = 'card';
+      const img = document.createElement('img'); img.src = m.poster; img.alt = m.title; img.title = m.title;
+      img.onclick = () => window.open(m.imdb, '_blank');
       const title = document.createElement('div'); title.className = 'title'; title.textContent = m.title;
       const meta = document.createElement('div'); meta.className = 'meta'; meta.textContent = `Viewed on: ${m.date}`;
+      const btn = document.createElement('a'); btn.className = 'btn'; btn.href = m.imdb; btn.target='_blank'; btn.rel='noopener noreferrer'; btn.textContent = 'Open IMDb';
 
-      const wrap = document.createElement('div'); wrap.className = 'frame-wrap';
-      const iframe = document.createElement('iframe');
-      iframe.src = m.imdb;
-      iframe.loading = 'lazy';
-      iframe.title = `IMDb: ${m.title}`;
-
-      const fallback = document.createElement('div'); fallback.className = 'fallback';
-      const fmsg = document.createElement('div'); fmsg.textContent = 'IMDb embedding blocked — open instead:';
-      const btn = document.createElement('a'); btn.className = 'btn'; btn.href = m.imdb; btn.target = '_blank'; btn.rel='noopener noreferrer'; btn.textContent = 'Open IMDb Page';
-      fallback.appendChild(fmsg); fallback.appendChild(btn);
-
-      wrap.appendChild(iframe);
-      wrap.appendChild(fallback);
-
-      iframe.addEventListener('load', () => {
-        setTimeout(() => {
-          if (iframe.offsetHeight > 50) fallback.style.display = 'none';
-        }, 300);
-      });
-
+      card.appendChild(img);
       card.appendChild(title);
       card.appendChild(meta);
-      card.appendChild(wrap);
+      card.appendChild(btn);
       grid.appendChild(card);
     });
   </script>
