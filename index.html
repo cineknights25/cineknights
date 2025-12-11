@@ -38,7 +38,7 @@
       cover.onclick = () => window.open(m.imdb, '_blank');
 
       const title = document.createElement('div'); title.className = 'title'; title.textContent = m.title;
-      const meta = document.createElement('div'); meta.className = 'meta'; meta.textContent = `Viewed on: ${m.date}`;
+      const meta = document.createElement('div'); meta.className = 'meta'; meta.textContent = `${m.date}`;
       const btn = document.createElement('a'); btn.className = 'btn'; btn.href = m.imdb; btn.target='_blank'; btn.rel='noopener noreferrer'; btn.textContent = 'Open IMDb';
 
       card.appendChild(cover);
