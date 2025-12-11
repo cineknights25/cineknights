@@ -9,7 +9,7 @@
     h1 { margin-bottom:20px; font-size:1.7rem; }
     .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:20px; }
     .card { background:#1e293b; border-radius:14px; padding:12px; box-shadow:0 6px 18px rgba(0,0,0,0.55); display:flex; flex-direction:column; align-items:center; }
-    .card img { border-radius:10px; width:100%; height:auto; object-fit:cover; }
+    .cover { width:100%; height:300px; background-size:cover; background-position:center; border-radius:10px; cursor:pointer; }
     .title { font-weight:600; margin:8px 0 4px; font-size:1rem; text-align:center; }
     .meta { font-size:0.85rem; color:#b8c7da; margin-bottom:8px; text-align:center; }
     .btn { padding:6px 12px; border-radius:8px; text-decoration:none; background:#334155; color:#fff; font-weight:600; }
@@ -32,13 +32,15 @@
 
     movies.forEach(m => {
       const card = document.createElement('div'); card.className = 'card';
-      const img = document.createElement('img'); img.src = m.poster; img.alt = m.title; img.title = m.title;
-      img.onclick = () => window.open(m.imdb, '_blank');
+      const cover = document.createElement('div'); cover.className = 'cover'; cover.style.backgroundImage = `url('${m.poster}')`;
+      cover.title = m.title;
+      cover.onclick = () => window.open(m.imdb, '_blank');
+
       const title = document.createElement('div'); title.className = 'title'; title.textContent = m.title;
       const meta = document.createElement('div'); meta.className = 'meta'; meta.textContent = `Viewed on: ${m.date}`;
       const btn = document.createElement('a'); btn.className = 'btn'; btn.href = m.imdb; btn.target='_blank'; btn.rel='noopener noreferrer'; btn.textContent = 'Open IMDb';
 
-      card.appendChild(img);
+      card.appendChild(cover);
       card.appendChild(title);
       card.appendChild(meta);
       card.appendChild(btn);
