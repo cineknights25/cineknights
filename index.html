@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>My IMDb Watchlist (iframe demo)</title>
+  <style>
+    :root{font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;}
+    body{margin:0;padding:32px;background:#0f172a;color:#e6eef8}
+    h1{margin:0 0 16px;font-size:1.6rem}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:18px}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01));border-radius:12px;padding:12px;box-shadow:0 6px 18px rgba(2,6,23,0.6)}
+    .title{font-weight:600;margin:6px 0}
+    .meta{font-size:0.9rem;color:#b8c7da}
+    .frame-wrap{position:relative;height:180px;border-radius:8px;overflow:hidden;background:#071025;margin-top:8px}
+    iframe{width:100%;height:100%;border:0}
+    .fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:12px;text-align:center}
+    .btn{display:inline-block;margin-top:8px;padding:8px 10px;border-radius:8px;text-decoration:none;background:#1e293b;color:#fff;font-weight:600}
+    .note{font-size:0.8rem;color:#9fb0d0;margin-top:6px}
+    footer{margin-top:22px;color:#9fb0d0;font-size:0.85rem}
+  </style>
+</head>
+<body>
+  <h1>My IMDb page embeds — demo</h1>
+  <p class="note">This GitHub Pages page attempts to show IMDb pages inside iframes. Many sites (including IMDb) often block embedding — if that happens you'll see the fallback (link + poster). Use the edit instructions below to replace the example movies with your own IMDb links.</p>
+
+  <div class="grid" id="grid"></div>
+
+  <footer>
+    <strong>How to deploy:</strong> create a GitHub repo, add this file as <code>index.html</code>, push, then enable GitHub Pages from the repository settings (branch: main / root). The page will be available at <code>https://&lt;your-username&gt;.github.io/&lt;repo-name&gt;/</code>.
+  </footer>
+
+  <script>
+    // Edit this list with your IMDb URLs. Example items included.
+    const movies = [
+      // Each item now supports: { title, imdb, date }
+      // Example date format: '2024-01-12'
+      { title: 'The Shawshank Redemption (1994)', imdb: 'https://www.imdb.com/title/tt0111161/', date: '2023-12-20' // (1994)', imdb: 'https://www.imdb.com/title/tt0111161/' },
+      { title: 'Inception (2010)', imdb: 'https://www.imdb.com/title/tt1375666/', date: '2024-02-01' // (2010)', imdb: 'https://www.imdb.com/title/tt1375666/' },
+      { title: 'The Matrix (1999)', imdb: 'https://www.imdb.com/title/tt0133093/', date: '2022-11-10' // (1999)', imdb: 'https://www.imdb.com/title/tt0133093/' }
+    ];
+
+    const grid = document.getElementById('grid');
+
+    movies.forEach(m => {
+      const card = document.createElement('div'); card.className = 'card';
+      const title = document.createElement('div'); title.className = 'title'; title.textContent = m.title;
+      const meta = document.createElement('div'); meta.className = 'meta'; meta.textContent = `${m.imdb} — Viewed on: ${m.date || 'N/A'}`;
+
+      const wrap = document.createElement('div'); wrap.className = 'frame-wrap';
+      const iframe = document.createElement('iframe');
+      iframe.src = m.imdb;
+      iframe.loading = 'lazy';
+      iframe.title = `IMDb: ${m.title}`;
+
+      // Fallback overlay: visible if the iframe content fails to render or if embedding is blocked.
+      const fallback = document.createElement('div'); fallback.className = 'fallback';
+      const fmsg = document.createElement('div'); fmsg.textContent = 'Embedding likely blocked — open IMDb page instead';
+      const btn = document.createElement('a'); btn.className = 'btn'; btn.href = m.imdb; btn.target = '_blank'; btn.rel='noopener noreferrer'; btn.textContent = 'Open on IMDb';
+      fallback.appendChild(fmsg); fallback.appendChild(btn);
+
+      wrap.appendChild(iframe);
+      wrap.appendChild(fallback);
+
+      // Because many sites send headers that prevent embedding, we show the fallback by default but hide it if the iframe seems to render.
+      // Note: due to cross-origin restrictions we cannot inspect inside the iframe, so this is a heuristic:
+      // if the iframe loads (fires load event) and its height > 50px after a delay, we hide the fallback. This may still fail if the site keeps an empty embed.
+      iframe.addEventListener('load', () => {
+        // try a short delay then attempt to check size
+        setTimeout(() => {
+          try {
+            // accessing iframe.contentDocument will throw on cross-origin; instead use a visual heuristic: if iframe.offsetHeight > 60 treat as rendered.
+            if (iframe.offsetHeight > 60) {
+              fallback.style.display = 'none';
+            }
+          } catch (e) {
+            // ignore
+          }
+        }, 300);
+      });
+
+      card.appendChild(title);
+      card.appendChild(meta);
+      card.appendChild(wrap);
+      grid.appendChild(card);
+    });
+  </script>
+</body>
+</html>
