@@ -1,3 +1,20 @@
+.thank-you {
+  font-size: 3rem;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 30px;
+  animation: colorShift 4s linear infinite;
+  text-shadow: 0 0 15px rgba(255,255,255,0.4);
+}
+
+@keyframes colorShift {
+  0%   { color: #22c55e; }
+  25%  { color: #38bdf8; }
+  50%  { color: #a855f7; }
+  75%  { color: #f97316; }
+  100% { color: #22c55e; }
+}
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -17,6 +34,9 @@
   </style>
 </head>
 <body>
+  <div class="thank-you">
+  ΘΑΝΑΣΗ ΣΕ ΕΥΧΑΡΙΣΤΟΥΜΕ ΠΟΛΥ ΠΟΥ ΕΙΣΑΙ ΤΟΣΟ ΣΙΝΕΦΙΛ ΚΑΙ ΜΟΙΡΑΖΕΣΑΙ ΛΙΓΗ ΑΠΟ ΤΗ ΦΟΒΕΡΗ ΦΑΝΤΑΣΤΙΚΗ ΓΝΩΣΗ ΣΟΥ ΓΙΑ ΤΑΙΝΙΕΣ
+  </div>
   <h1>CineKnights Watch Log</h1>
   <div class="grid" id="grid"></div>
   <footer></footer>
